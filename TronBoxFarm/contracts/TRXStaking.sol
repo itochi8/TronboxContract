@@ -7,13 +7,13 @@ import './libs/Ownable.sol';
 
 // import "@nomiclabs/buidler/console.sol";
 
-interface IWBNB {
+interface IWTRX {
     function deposit() external payable;
     function transfer(address to, uint256 value) external returns (bool);
     function withdraw(uint256) external;
 }
 
-contract BnbStaking is Ownable {
+contract TRXStaking is Ownable {
     using SafeMath for uint256;
     using SafeBEP20 for IBEP20;
 
@@ -39,8 +39,8 @@ contract BnbStaking is Ownable {
     address public adminAddress;
 
 
-    // WBNB
-    address public WBNB;
+    // WTRX
+    address public WTRX;
 
     // PSWAP tokens created per block.
     uint256 public rewardPerBlock;
@@ -49,7 +49,7 @@ contract BnbStaking is Ownable {
     PoolInfo[] public poolInfo;
     // Info of each user that stakes LP tokens.
     mapping (address => UserInfo) public userInfo;
-    // limit 10 BNB here
+    // limit 10 TRX here
     uint256 public limitAmount = 10000000000000000000;
     // Total allocation poitns. Must be the sum of all allocation points in all pools.
     uint256 public totalAllocPoint = 0;
@@ -69,14 +69,14 @@ contract BnbStaking is Ownable {
         uint256 _startBlock,
         uint256 _bonusEndBlock,
         address _adminAddress,
-        address _wbnb
+        address _wTRX
     ) public {
         rewardToken = _rewardToken;
         rewardPerBlock = _rewardPerBlock;
         startBlock = _startBlock;
         bonusEndBlock = _bonusEndBlock;
         adminAddress = _adminAddress;
-        WBNB = _wbnb;
+        WTRX = _wTRX;
 
         // staking pool
         poolInfo.push(PoolInfo({
@@ -96,7 +96,7 @@ contract BnbStaking is Ownable {
     }
 
     receive() external payable {
-        assert(msg.sender == WBNB); // only accept BNB via fallback from the WBNB contract
+        assert(msg.sender == WTRX); // only accept TRX via fallback from the WTRX contract
     }
 
     // Update admin address by the previous dev.
@@ -184,7 +184,7 @@ contract BnbStaking is Ownable {
             }
         }
         if(msg.value > 0) {
-            assert(IWBNB(WBNB).transfer(address(this), msg.value));
+            assert(IWTRX(WTRX).transfer(address(this), msg.value));
             user.amount = user.amount.add(msg.value);
         }
         user.rewardDebt = user.amount.mul(pool.accPSWAPPerShare).div(1e12);
@@ -192,7 +192,7 @@ contract BnbStaking is Ownable {
         emit Deposit(msg.sender, msg.value);
     }
 
-    function safeTransferBNB(address to, uint256 value) internal {
+    function safeTransferTRX(address to, uint256 value) internal {
         (bool success, ) = to.call("");
         // (bool success,) = to.call{value:value}(new bytes(0));
         require(success, 'TransferHelper: ETH_TRANSFER_FAILED');
@@ -210,8 +210,8 @@ contract BnbStaking is Ownable {
         }
         if(_amount > 0) {
             user.amount = user.amount.sub(_amount);
-            IWBNB(WBNB).withdraw(_amount);
-            safeTransferBNB(address(msg.sender), _amount);
+            IWTRX(WTRX).withdraw(_amount);
+            safeTransferTRX(address(msg.sender), _amount);
         }
         user.rewardDebt = user.amount.mul(pool.accPSWAPPerShare).div(1e12);
 
