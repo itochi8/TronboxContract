@@ -2,21 +2,26 @@
 
 First you shoud install TronBox if you d'ont have it already.
 
-`npm install -g tronbox`
+```
+npm install -g tronbox 
+```
 
 First, you must be in the folder `TronBox-core` or `TronBoxFarm` folders using the command `cd <folderName>`  
 
 To compile the contract, use:
-
-`tronbox compile`
-
-By default, tronbox compiler only compiles modified contracts since last compile, to reduce unnecessary compiling. If you wish to compile the entire file, you can use `--compile-all`.
-
-`tronbox compile --compile-all`
-
+```
+tronbox compile
+```
+By default, tronbox compiler only compiles modified contracts since last compile, to reduce unnecessary compiling. If you wish to compile the entire file, you can use ```
+--compile-all
+```
+tronbox compile --compile-all
+```
 And you can use the following command to migrate and deploy the smart contract on Tron Blockchain
 
-`tronbox migrate --reset`
+```
+tronbox migrate --reset
+```
 
 After the deployement you shoud see somthing like that :
 ```
